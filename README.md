@@ -1,4 +1,4 @@
-# Phil's Magical Web3 CrYpT0bl0g
+# Phil's Magical Web3 Wonderland
 
 ## Summary
 
@@ -11,7 +11,7 @@ To deploy the app:
 1. Clone this repository
 
 ```sh
-git clone git@github.com:philspins/full-stack-web3.git
+git clone git@github.com:philspins/phils-web3-wonderland.git
 ```
 
 2. Install the dependencies
