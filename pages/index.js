@@ -5,12 +5,11 @@ import { useRouter } from 'next/router'
 import { ethers } from 'ethers'
 import Link from 'next/link'
 import { AccountContext } from '../context'
-import {
-  contractAddress, ownerAddress
-} from '../config'
-import Blog from '../artifacts/contracts/Blog.sol/Blog.json'
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
 
+import {
+  ownerAddress
+} from '../config'
 
 export default function Home(props) {
   // posts are fetched server side and passed in as props: see getServerSideProps
@@ -40,7 +39,7 @@ export default function Home(props) {
                     <a className={postTitle}>{post.title}</a>
                   </Link>
                   <ReactMarkdown className={postSummary}>{post.postContent}</ReactMarkdown>
-                  <p className={postSummary}>Tags: {post[2]}</p><br />
+                  <p className={postSummary}>Tags: {post.tags}</p><br />
                 </div>
               </div>
             )
@@ -71,40 +70,23 @@ export async function getServerSideProps() {
   } else {
     provider = new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/')
   }
-
-  // const contract = new ethers.Contract(contractAddress, Blog.abi, provider)
-  // const data = await contract.fetchPostsDescending()
-  // return {
-  //   props: {
-  //     posts: JSON.parse(JSON.stringify(data))
-  //   }
-  // }
-
-  // Graph API endpoint
+  
   const APIURL = 'https://api.thegraph.com/subgraphs/name/philspins/web3-wonderland'
-
+  const client = new ApolloClient({uri: APIURL, cache: new InMemoryCache()})
   const postsQuery = `
     query {
       posts(first: 5) {
-        id
+        hash
         title
         postContent
         tags
       }
     }
   `
-  const client = new ApolloClient({
-    uri: APIURL,
-    cache: new InMemoryCache(),
-  })
 
-  const data = await client.query({
-    query: gql(postsQuery),
-  })
-  .catch((err) => {
-    console.log('Error fetching data: ', err)
-  })
-  console.log(JSON.stringify(data.data.posts));
+  const data = await client.query({query: gql(postsQuery)})
+  .catch((err) => {console.log('Error fetching data: ', err)})
+
   return {
     props: {
       posts: JSON.parse(JSON.stringify(data.data.posts))

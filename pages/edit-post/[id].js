@@ -157,7 +157,7 @@ const titleStyle = css`
   width: 100%;
   background-color: #eaeaea;
   color: #444444;
-  border-width: 5px;
+  border-radius: 5px;
   font-size: 44px;
   font-weight: 600;
   &::placeholder {
