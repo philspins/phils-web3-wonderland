@@ -33,7 +33,7 @@ export default function Post() {
     if (!id) return
     let provider
     if (process.env.NEXT_PUBLIC_ENVIRONMENT === 'local') {
-      provider = new ethers.providers.JsonRpcProvider()
+      provider = new ethers.providers.JsonRpcProvider('http://127.0.0.1:8545/')
     } else if (process.env.NEXT_PUBLIC_ENVIRONMENT === 'testnet') {
       provider = new ethers.providers.JsonRpcProvider('https://rpc-mumbai.matic.today')
     } else {
@@ -71,7 +71,8 @@ export default function Post() {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     const signer = provider.getSigner()
     const contract = new ethers.Contract(contractAddress, Blog.abi, signer)
-    await contract.updatePost(post.id, post.title, hash, true)
+    await contract.updatePost(post.id, post.title, hash, post.tags, true)
+    // await contract.updatePost(post.id, post.title, Date.now(), post.tags, hash, true)
     router.push('/')
   }
 
@@ -87,19 +88,25 @@ export default function Post() {
         editing && (
           <div>
             <input
-              onChange={e => setPost({ ...post, title: e.target.value })}
               name='title'
-              placeholder='Give it a title ...'
+              placeholder='captivating title'
               value={post.title}
               className={titleStyle}
+              onChange={e => setPost({ ...post, title: e.target.value })}
             />
             <SimpleMDE
-              className={mdEditor}
-              placeholder="What's on your mind?"
+              name='content'
               value={post.content}
+              className={mdEditor}
               onChange={value => setPost({ ...post, content: value })}
             />
-            <button className={button} onClick={updatePost}>Update post</button>
+            <input
+              name='tags'
+              placeholder='tags, go, here'
+              value={post.tags}
+              className={tagsStyle}
+              onChange={value => setPost({ ...post, tags: value })}
+            />
           </div>
         )
       }
@@ -109,22 +116,105 @@ export default function Post() {
             {
               post.coverImagePath && (
                 <img
-                  src={post.coverImagePath}
-                  className={coverImageStyle}
+                src={post.coverImagePath}
+                className={coverImageStyle}
                 />
-              )
-            }
-            <h1>{post.title}</h1>
+                )
+              }
             <div className={contentContainer}>
+              <h1 className={title}>{post.title}</h1>
               <ReactMarkdown>{post.content}</ReactMarkdown>
+              <p>Tags: {post.tags}</p>
             </div>
           </div>
         )
       }
-      <button className={button} onClick={() => setEditing(editing ? false : true)}>{ editing ? 'View post' : 'Edit post'}</button>
+      <div className={buttonContainer}>
+        {
+          editing && (
+            <button className={button} onClick={updatePost}>Update post</button>
+          )
+        }
+        <button className={button} onClick={() => setEditing(editing ? false : true)}>{ editing ? 'View post' : 'Edit post'}</button>
+      </div>
     </div>
   )
 }
+
+const coverImageStyle = css`
+  width: 75%;
+`
+
+const title = css`
+  margin: 0;
+`
+
+const titleStyle = css`
+  padding: 15px;
+  margin-top: 15px;
+  border: none;
+  outline: none;
+  width: 100%;
+  background-color: #eaeaea;
+  color: #444444;
+  border-width: 5px;
+  font-size: 44px;
+  font-weight: 600;
+  &::placeholder {
+    color: #888888;
+  }
+`
+
+const tagsStyle = css`
+  padding: 15px;
+  margin-top: 15px;
+  margin-right: 40px;
+  width: 100%;
+  border: none;
+  outline: none;
+  background-color: #eaeaea;
+  color: #444444;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: 600;
+  &::placeholder {
+    color: #888888;
+  }
+`
+
+const mdEditor = css`
+  padding: 5px;
+  margin-top: 15px;
+  border: 10px black;
+  background-color: #eaeaea;
+  color: #444444;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: 600;
+`
+
+const container = css`
+  background-color: #ffffff;
+  padding: 20px;
+  width: 75%;
+  margin: 0 auto;
+  border-radius: 15px;  
+`
+
+const contentContainer = css`
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  & img {
+    max-width: 900px;
+  }
+`
+
+const buttonContainer = css`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+`
 
 const button = css`
   background-color: #fafafa;
@@ -132,44 +222,11 @@ const button = css`
   border: none;
   border-radius: 15px;
   cursor: pointer;
-  margin-right: 10px;
-  margin-top: 15px;
-  font-size: 18px;
   padding: 16px 70px;
+  margin-right: 10px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 18px;
   box-shadow: 7px 7px rgba(0, 0, 0, .1);
-`
-
-const titleStyle = css`
-  margin-top: 40px;
-  border: none;
-  outline: none;
-  background-color: inherit;
-  font-size: 44px;
-  font-weight: 600;
-  &::placeholder {
-    color: #999999;
-  }
-`
-
-const mdEditor = css`
-  margin-top: 40px;
-`
-
-const coverImageStyle = css`
-  width: 900px;
-`
-
-const container = css`
-  width: 900px;
-  margin: 0 auto;
-`
-
-const contentContainer = css`
-  margin-top: 60px;
-  padding: 0px 40px;
-  border-left: 1px solid #e7e7e7;
-  border-right: 1px solid #e7e7e7;
-  & img {
-    max-width: 900px;
-  }
+  justify-content: flex-end;
 `

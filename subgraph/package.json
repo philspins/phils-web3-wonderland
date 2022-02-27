@@ -1,13 +1,13 @@
 {
-  "name": "onchainblogmumbaitst",
+  "name": "web3-wonderland",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ dabit3/onchainblogmumbaitst",
-    "create-local": "graph create --node http://localhost:8020/ dabit3/onchainblogmumbaitst",
-    "remove-local": "graph remove --node http://localhost:8020/ dabit3/onchainblogmumbaitst",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 dabit3/onchainblogmumbaitst"
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ philspins/web3-wonderland",
+    "create-local": "graph create --node http://localhost:8020/ philspins/web3-wonderland",
+    "remove-local": "graph remove --node http://localhost:8020/ philspins/web3-wonderland",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 philspins/web3-wonderland"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.26.0",

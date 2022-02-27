@@ -10,7 +10,8 @@ import { ipfs, json } from '@graphprotocol/graph-ts'
 export function handlePostCreated(event: PostCreatedEvent): void {
   let post = new Post(event.params.id.toString());
   post.title = event.params.title;
-  post.contentHash = event.params.hash;
+  post.hash = event.params.hash;
+  post.tags = event.params.tags
   let data = ipfs.cat(event.params.hash);
   if (data) {
     let value = json.fromBytes(data).toObject()
@@ -29,7 +30,8 @@ export function handlePostUpdated(event: PostUpdatedEvent): void {
   let post = Post.load(event.params.id.toString());
   if (post) {
     post.title = event.params.title;
-    post.contentHash = event.params.hash;
+    post.hash = event.params.hash;
+    post.tags = event.params.tags;
     post.published = event.params.published;
     let data = ipfs.cat(event.params.hash);
     if (data) {

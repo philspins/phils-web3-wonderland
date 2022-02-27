@@ -30,7 +30,7 @@ function CreatePost() {
   const [loaded, setLoaded] = useState(false)
 
   const fileRef = useRef(null)
-  const { title, content } = post
+  const { title, content, tags } = post
   const router = useRouter()
 
   useEffect(() => {
@@ -70,9 +70,10 @@ function CreatePost() {
       const contract = new ethers.Contract(contractAddress, Blog.abi, signer)
       console.log('contract: ', contract)
       try {
-        const val = await contract.createPost(post.title, hash)
-        /* optional - wait for transaction to be confirmed before rerouting */
-        /* await provider.waitForTransaction(val.hash) */
+        const val = await contract.createPost(post.title, hash, post.tags)
+        
+        // optional - wait for transaction to be confirmed before rerouting
+        await provider.waitForTransaction(val.hash)
         console.log('val: ', val)
       } catch (err) {
         console.log('Error: ', err)
@@ -101,41 +102,45 @@ function CreatePost() {
           <img className={coverImageStyle} src={URL.createObjectURL(image)} />
         )
       }
-      <input
-        onChange={onChange}
-        name='title'
-        placeholder='Give it a title ...'
-        value={post.title}
-        className={titleStyle}
-      />
-      <SimpleMDE
-        className={mdEditor}
-        placeholder="What's on your mind?"
-        value={post.content}
-        onChange={value => setPost({ ...post, content: value })}
-      />
-      {
-        loaded && (
-          <>
-            <button
-              className={button}
-              type='button'
-              onClick={createNewPost}
-            >Publish</button>
-            <button
-              onClick={triggerOnChange}
-              className={button}
-            >Add cover image</button>
-          </>
-        )
-      }
-      <input
-        id='selectImage'
-        className={hiddenInput} 
-        type='file'
-        onChange={handleFileChange}
-        ref={fileRef}
-      />
+      <div>
+        <input
+          name='title'
+          placeholder='captivating title'
+          value={post.title}
+          className={titleStyle}
+          onChange={onChange}
+        />
+        <SimpleMDE
+          name='content'
+          value={post.content}
+          className={mdEditor}
+          onChange={value => setPost({ ...post, content: value })}
+        />
+        <input
+          name='tags'
+          placeholder='tags, go, here'
+          value={post.tags}
+          className={tagsStyle}
+          onChange={onChange}
+        />
+      </div>
+      <div className={buttonContainer}>
+        {
+          loaded && (
+            <>
+              <button className={button} type='button' onClick={createNewPost}>Publish</button>
+              <button  className={button} onClick={triggerOnChange}>Add cover image</button>
+            </>
+          )
+        }
+        <input
+          id='selectImage'
+          className={hiddenInput} 
+          type='file'
+          onChange={handleFileChange}
+          ref={fileRef}
+        />
+      </div>
     </div>
   )
 }
@@ -148,25 +153,62 @@ const coverImageStyle = css`
   max-width: 800px;
 `
 
-const mdEditor = css`
-  margin-top: 40px;
-`
-
 const titleStyle = css`
-  margin-top: 40px;
+  padding: 15px;
+  margin-top: 15px;
   border: none;
   outline: none;
-  background-color: inherit;
+  width: 100%;
+  background-color: #eaeaea;
+  color: #444444;
+  border-width: 5px;
   font-size: 44px;
   font-weight: 600;
   &::placeholder {
-    color: #999999;
+    color: #888888;
   }
 `
 
+const tagsStyle = css`
+  padding: 15px;
+  margin-top: 15px;
+  margin-right: 40px;
+  width: 100%;
+  border: none;
+  outline: none;
+  background-color: #eaeaea;
+  color: #444444;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: 600;
+  &::placeholder {
+    color: #888888;
+  }
+`
+
+const mdEditor = css`
+  padding: 5px;
+  margin-top: 15px;
+  border: 10px black;
+  background-color: #eaeaea;
+  color: #444444;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: 600;
+`
+
 const container = css`
-  width: 800px;
+  background-color: #ffffff;
+  padding: 20px;
+  width: 75%;
   margin: 0 auto;
+  border-radius: 15px;  
+`
+
+const buttonContainer = css`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
 `
 
 const button = css`
@@ -175,10 +217,13 @@ const button = css`
   border: none;
   border-radius: 15px;
   cursor: pointer;
-  margin-right: 10px;
-  font-size: 18px;
   padding: 16px 70px;
+  margin-right: 10px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 18px;
   box-shadow: 7px 7px rgba(0, 0, 0, .1);
+  justify-content: flex-end;
 `
 
 export default CreatePost

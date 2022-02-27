@@ -17,7 +17,8 @@ export class Post extends Entity {
     this.set("id", Value.fromString(id));
 
     this.set("title", Value.fromString(""));
-    this.set("contentHash", Value.fromString(""));
+    this.set("hash", Value.fromString(""));
+    this.set("tags", Value.fromString(""));
     this.set("published", Value.fromBoolean(false));
     this.set("postContent", Value.fromString(""));
     this.set("createdAtTimestamp", Value.fromBigInt(BigInt.zero()));
@@ -59,13 +60,22 @@ export class Post extends Entity {
     this.set("title", Value.fromString(value));
   }
 
-  get contentHash(): string {
-    let value = this.get("contentHash");
+  get hash(): string {
+    let value = this.get("hash");
     return value!.toString();
   }
 
-  set contentHash(value: string) {
-    this.set("contentHash", Value.fromString(value));
+  set hash(value: string) {
+    this.set("hash", Value.fromString(value));
+  }
+
+  get tags(): string {
+    let value = this.get("tags");
+    return value!.toString();
+  }
+
+  set tags(value: string) {
+    this.set("tags", Value.fromString(value));
   }
 
   get published(): boolean {

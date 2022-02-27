@@ -24,45 +24,39 @@ export default function Home(props) {
     router.push('/create-post')
   }
 
+  function postListVisible() {
+    if(posts && !posts.length) return invisible;
+    return postList;
+  }
+
   return (
-    <div>
-      <div className={postList}>
+    <div className={body}>
+      <div className={postListVisible()}>
         {
           /* map over the posts array and render a button with the post title */
           posts.map((post, index) => (
-            <Link href={`/post/${post[2]}`} key={index}>
-              <a>
-                <div className={linkStyle}>
-                  <p className={postTitle}>{post[1]}</p>
-                  <div className={arrowContainer}>
-                  <img
-                      src='/right-arrow.svg'
-                      alt='Right arrow'
-                      className={smallArrow}
-                    />
-                  </div>
+            post[2] != "" && (
+              <div>
+                <div className={postContainer}>
+                  <Link href={`/post/${post[3]}`} key={index}>
+                    <a className={postTitle}>{post[1]}</a>
+                  </Link>
+                  <p className={postSummary}>Tags: {post[2]}</p><br />
                 </div>
-              </a>
-            </Link>
+              </div>
+            )
           ))
         }
       </div>
-      <div className={container}>
         {
           (account === ownerAddress) && posts && !posts.length && (
             /* if the signed in user is the account owner, render a button */
             /* to create the first post */
             <button className={buttonStyle} onClick={navigate}>
               Create your first post
-              <img
-                src='/right-arrow.svg'
-                alt='Right arrow'
-                className={arrow}
-              />
             </button>
           )
         }
-      </div>
     </div>
   )
 }
@@ -72,7 +66,7 @@ export async function getServerSideProps() {
   /* and render a provider based on the environment we're in */
   let provider
   if (process.env.ENVIRONMENT === 'local') {
-    provider = new ethers.providers.JsonRpcProvider()
+    provider = new ethers.providers.JsonRpcProvider('http://127.0.0.1:8545/')    
   } else if (process.env.ENVIRONMENT === 'testnet') {
     provider = new ethers.providers.JsonRpcProvider('https://rpc-mumbai.matic.today')
   } else {
@@ -80,7 +74,7 @@ export async function getServerSideProps() {
   }
 
   const contract = new ethers.Contract(contractAddress, Blog.abi, provider)
-  const data = await contract.fetchPosts()
+  const data = await contract.fetchPostsDescending()
   return {
     props: {
       posts: JSON.parse(JSON.stringify(data))
@@ -88,40 +82,50 @@ export async function getServerSideProps() {
   }
 }
 
-const arrowContainer = css`
+const body = css`
   display: flex;
-  flex: 1;
-  justify-content: flex-end;
-  padding-right: 20px;
+  justify-content: center;
 `
 
 const postTitle = css`
   font-size: 30px;
   font-weight: bold;
+  margin: 0;
+  padding: 20px;
+`
+
+const invisible = css`
+  visibility: none !important;
+`
+
+const postList = css`
+  width: 75%;
+  margin: 0 auto;
+  padding-top: 30px;
+  padding-bottom: 10px;
+  padding-right: 20px;
+  padding-left: 20px;
+  justify-content: center;
+  background-color: #ffffff;
+  border-radius: 10px;
+`
+
+const postContainer = css`
+  background-color: #eaeaea;
+  padding-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+`
+
+const postSummary = css`
   cursor: pointer;
   margin: 0;
   padding: 20px;
 `
 
-const linkStyle = css`
-  border: 1px solid #ddd;
-  margin-top: 20px;
-  border-radius: 8px;
-  display: flex;
-`
-
-const postList = css`
-  width: 700px;
-  margin: 0 auto;
-  padding-top: 50px;  
-`
-
-const container = css`
+const buttonStyle = css`
   display: flex;
   justify-content: center;
-`
-
-const buttonStyle = css`
   margin-top: 100px;
   background-color: #fafafa;
   outline: none;
@@ -131,13 +135,4 @@ const buttonStyle = css`
   border-radius: 15px;
   cursor: pointer;
   box-shadow: 7px 7px rgba(0, 0, 0, .1);
-`
-
-const arrow = css`
-  width: 35px;
-  margin-left: 30px;
-`
-
-const smallArrow = css`
-  width: 25px;
 `

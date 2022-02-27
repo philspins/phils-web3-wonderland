@@ -24,22 +24,10 @@ export default function Post({ post }) {
   }
 
   return (
-    <div>
+    <div className={container}>
       {
         post && (
-          <div className={container}>
-            {
-              /* if the owner is the user, render an edit button */
-              ownerAddress === account && (
-                <div className={editPost}>
-                  <Link href={`/edit-post/${id}`}>
-                    <a>
-                      Edit post
-                    </a>
-                  </Link>
-                </div>
-              )
-            }
+          <div>
             {
               /* if the post has a cover image, render it */
               post.coverImage && (
@@ -49,13 +37,25 @@ export default function Post({ post }) {
                 />
               )
             }
-            <h1>{post.title}</h1>
             <div className={contentContainer}>
+              <h1 className={title}>{post.title}</h1>
               <ReactMarkdown>{post.content}</ReactMarkdown>
+              <br />
+              <p>Tags: {post.tags}</p>
             </div>
           </div>
         )
       }
+      <div className={buttonContainer}>
+      {
+        /* if the owner is the user, render an edit button */
+        ownerAddress === account && (
+          <div className={button}>
+            <Link href={`/edit-post/${id}`}>Edit post</Link>
+          </div>
+        )
+      }
+      </div>
     </div>
   )
 }
@@ -64,7 +64,7 @@ export async function getStaticPaths() {
   /* here we fetch the posts from the network */
   let provider
   if (process.env.ENVIRONMENT === 'local') {
-    provider = new ethers.providers.JsonRpcProvider()
+    provider = new ethers.providers.JsonRpcProvider('http://127.0.0.1:8545/')
   } else if (process.env.ENVIRONMENT === 'testnet') {
     provider = new ethers.providers.JsonRpcProvider('https://rpc-mumbai.matic.today')
   } else {
@@ -105,25 +105,50 @@ export async function getStaticProps({ params }) {
   }
 }
 
-const editPost = css`
-  margin: 20px 0px;
-`
-
 const coverImageStyle = css`
   width: 900px;
 `
 
 const container = css`
-  width: 900px;
+  width: 75%;
   margin: 0 auto;
 `
 
+const buttonContainer = css`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+`
+
+const title = css`
+  margin: 0;
+`
+
+
+const tagsLabel = css`
+  padding: 5px;
+  margin-bottom: 10px;
+`
+
 const contentContainer = css`
-  margin-top: 60px;
-  padding: 0px 40px;
-  border-left: 1px solid #e7e7e7;
-  border-right: 1px solid #e7e7e7;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
   & img {
     max-width: 900px;
   }
+`
+
+const button = css`
+  background-color: #fafafa;
+  outline: none;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  margin-right: 10px;
+  margin-top: 15px;
+  font-size: 18px;
+  padding: 16px 70px;
+  box-shadow: 7px 7px rgba(0, 0, 0, .1);
+  justify-content: flex-end;
 `

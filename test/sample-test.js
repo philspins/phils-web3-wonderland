@@ -4,7 +4,7 @@ const { ethers } = require("hardhat")
 describe("Blog", async function () {
   it("Should create a post", async function () {
     const Blog = await ethers.getContractFactory("Blog")
-    const blog = await Blog.deploy("My blog")
+    const blog = await Blog.deploy("Phil's Magical Web3 CrYp70bl06")
     await blog.deployed()
     await blog.createPost("My first post", "12345")
 
@@ -14,7 +14,7 @@ describe("Blog", async function () {
 
   it("Should edit a post", async function () {
     const Blog = await ethers.getContractFactory("Blog")
-    const blog = await Blog.deploy("My blog")
+    const blog = await Blog.deploy("Phil's Magical Web3 CrYp70bl06")
     await blog.deployed()
     await blog.createPost("My Second post", "12345")
     
@@ -26,10 +26,20 @@ describe("Blog", async function () {
 
   it("Should add update the name", async function () {
     const Blog = await ethers.getContractFactory("Blog")
-    const blog = await Blog.deploy("My blog")
+    const blog = await Blog.deploy("Phil's Magical Web3 CrYp70bl06")
     await blog.deployed()
 
-    expect(await blog.name()).to.equal("My blog")
+    expect(await blog.name()).to.equal("Phil's Magical Web3 CrYp70bl06")
+    await blog.updateName('My new blog')
+    expect(await blog.name()).to.equal("My new blog")
+  })
+
+  it("Should fetch posts in descending order", async function () {
+    const Blog = await ethers.getContractFactory("Blog")
+    const blog = await Blog.deploy("Phil's Magical Web3 CrYp70bl06")
+    await blog.deployed()
+
+    expect(await blog.name()).to.equal("Phil's Magical Web3 CrYp70bl06")
     await blog.updateName('My new blog')
     expect(await blog.name()).to.equal("My new blog")
   })

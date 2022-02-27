@@ -34,6 +34,10 @@ export class PostCreated__Params {
   get hash(): string {
     return this._event.parameters[2].value.toString();
   }
+
+  get tags(): string {
+    return this._event.parameters[3].value.toString();
+  }
 }
 
 export class PostUpdated extends ethereum.Event {
@@ -61,8 +65,12 @@ export class PostUpdated__Params {
     return this._event.parameters[2].value.toString();
   }
 
+  get tags(): string {
+    return this._event.parameters[3].value.toString();
+  }
+
   get published(): boolean {
-    return this._event.parameters[3].value.toBoolean();
+    return this._event.parameters[4].value.toBoolean();
   }
 }
 
@@ -79,12 +87,16 @@ export class Blog__fetchPostResultValue0Struct extends ethereum.Tuple {
     return this[2].toString();
   }
 
+  get tags(): string {
+    return this[3].toString();
+  }
+
   get published(): boolean {
-    return this[3].toBoolean();
+    return this[4].toBoolean();
   }
 }
 
-export class Blog__fetchPostsResultValue0Struct extends ethereum.Tuple {
+export class Blog__fetchPostsResultPostsStruct extends ethereum.Tuple {
   get id(): BigInt {
     return this[0].toBigInt();
   }
@@ -97,8 +109,34 @@ export class Blog__fetchPostsResultValue0Struct extends ethereum.Tuple {
     return this[2].toString();
   }
 
+  get tags(): string {
+    return this[3].toString();
+  }
+
   get published(): boolean {
-    return this[3].toBoolean();
+    return this[4].toBoolean();
+  }
+}
+
+export class Blog__fetchPostsDescendingResultPostsStruct extends ethereum.Tuple {
+  get id(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get title(): string {
+    return this[1].toString();
+  }
+
+  get content(): string {
+    return this[2].toString();
+  }
+
+  get tags(): string {
+    return this[3].toString();
+  }
+
+  get published(): boolean {
+    return this[4].toBoolean();
   }
 }
 
@@ -110,7 +148,7 @@ export class Blog extends ethereum.SmartContract {
   fetchPost(hash: string): Blog__fetchPostResultValue0Struct {
     let result = super.call(
       "fetchPost",
-      "fetchPost(string):((uint256,string,string,bool))",
+      "fetchPost(string):((uint256,string,string,string,bool))",
       [ethereum.Value.fromString(hash)]
     );
 
@@ -122,7 +160,7 @@ export class Blog extends ethereum.SmartContract {
   ): ethereum.CallResult<Blog__fetchPostResultValue0Struct> {
     let result = super.tryCall(
       "fetchPost",
-      "fetchPost(string):((uint256,string,string,bool))",
+      "fetchPost(string):((uint256,string,string,string,bool))",
       [ethereum.Value.fromString(hash)]
     );
     if (result.reverted) {
@@ -134,22 +172,22 @@ export class Blog extends ethereum.SmartContract {
     );
   }
 
-  fetchPosts(): Array<Blog__fetchPostsResultValue0Struct> {
+  fetchPosts(): Array<Blog__fetchPostsResultPostsStruct> {
     let result = super.call(
       "fetchPosts",
-      "fetchPosts():((uint256,string,string,bool)[])",
+      "fetchPosts():((uint256,string,string,string,bool)[])",
       []
     );
 
-    return result[0].toTupleArray<Blog__fetchPostsResultValue0Struct>();
+    return result[0].toTupleArray<Blog__fetchPostsResultPostsStruct>();
   }
 
   try_fetchPosts(): ethereum.CallResult<
-    Array<Blog__fetchPostsResultValue0Struct>
+    Array<Blog__fetchPostsResultPostsStruct>
   > {
     let result = super.tryCall(
       "fetchPosts",
-      "fetchPosts():((uint256,string,string,bool)[])",
+      "fetchPosts():((uint256,string,string,string,bool)[])",
       []
     );
     if (result.reverted) {
@@ -157,23 +195,37 @@ export class Blog extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      value[0].toTupleArray<Blog__fetchPostsResultValue0Struct>()
+      value[0].toTupleArray<Blog__fetchPostsResultPostsStruct>()
     );
   }
 
-  getGreeting(): string {
-    let result = super.call("getGreeting", "getGreeting():(string)", []);
+  fetchPostsDescending(): Array<Blog__fetchPostsDescendingResultPostsStruct> {
+    let result = super.call(
+      "fetchPostsDescending",
+      "fetchPostsDescending():((uint256,string,string,string,bool)[])",
+      []
+    );
 
-    return result[0].toString();
+    return result[0].toTupleArray<
+      Blog__fetchPostsDescendingResultPostsStruct
+    >();
   }
 
-  try_getGreeting(): ethereum.CallResult<string> {
-    let result = super.tryCall("getGreeting", "getGreeting():(string)", []);
+  try_fetchPostsDescending(): ethereum.CallResult<
+    Array<Blog__fetchPostsDescendingResultPostsStruct>
+  > {
+    let result = super.tryCall(
+      "fetchPostsDescending",
+      "fetchPostsDescending():((uint256,string,string,string,bool)[])",
+      []
+    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toString());
+    return ethereum.CallResult.fromValue(
+      value[0].toTupleArray<Blog__fetchPostsDescendingResultPostsStruct>()
+    );
   }
 
   name(): string {
@@ -260,6 +312,10 @@ export class CreatePostCall__Inputs {
 
   get hash(): string {
     return this._call.inputValues[1].value.toString();
+  }
+
+  get tags(): string {
+    return this._call.inputValues[2].value.toString();
   }
 }
 
@@ -360,8 +416,12 @@ export class UpdatePostCall__Inputs {
     return this._call.inputValues[2].value.toString();
   }
 
+  get tags(): string {
+    return this._call.inputValues[3].value.toString();
+  }
+
   get published(): boolean {
-    return this._call.inputValues[3].value.toBoolean();
+    return this._call.inputValues[4].value.toBoolean();
   }
 }
 

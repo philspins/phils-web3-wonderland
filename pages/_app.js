@@ -10,9 +10,8 @@ import { ownerAddress } from '../config'
 import 'easymde/dist/easymde.min.css'
 
 function MyApp({ Component, pageProps }) {
-  /* create local state to save account information after signin */
   const [account, setAccount] = useState(null)
-  /* web3Modal configuration for enabling wallet access */
+  // web3Modal configuration for enabling wallet access
   async function getWeb3Modal() {
     const web3Modal = new Web3Modal({
       network: 'mainnet',
@@ -29,7 +28,7 @@ function MyApp({ Component, pageProps }) {
     return web3Modal
   }
 
-  /* the connect function uses web3 modal to connect to the user's wallet */
+  // the connect function uses web3 modal to connect to the user's wallet
   async function connect() {
     try {
       const web3Modal = await getWeb3Modal()
@@ -50,23 +49,25 @@ function MyApp({ Component, pageProps }) {
             <a>
               <img
                 src='/logo.svg'
-                alt="React Logo"
-                style={{ width: '50px' }}
+                alt="animated infinity icon"
+                style={{
+                  width: '150px'
+                }}
               />
             </a>
           </Link>
           <Link href="/">
             <a>
               <div className={titleContainer}>
-                <h2 className={title}>Full Stack</h2>
-                <p className={description}>WEB3</p>
+                <h1 className={title}>Phil's Magical Web3 Wonderland</h1>
+                <h2 className={description}>straight from the block... chain</h2>
               </div>
             </a>
           </Link>
           {
             !account && (
               <div className={buttonContainer}>
-                <button className={buttonStyle} onClick={connect}>Connect</button>
+                <button className={buttonStyle} onClick={connect}>Login</button>
               </div>
             )
           }
@@ -115,23 +116,35 @@ const container = css`
 `
 
 const linkContainer = css`
-  padding: 30px 60px;
-  background-color: #fafafa;
+  display: flex;
+  background-color: rgba(255, 255, 255, .75);
+  padding: 10px 20px;
+  justify-content: center;
 `
 
 const nav = css`
-  background-color: white;
+  justify-content: center;
+  font-weight: 600;
+  color: white;
 `
 
 const header = css`
   display: flex;
-  border-bottom: 1px solid rgba(0, 0, 0, .075);
-  padding: 20px 30px;
+  align-items: center;
+  background-color: rgba(0, 0, 0, .075);
+  padding: 20px;
+`
+
+const title = css`
+  margin-left: 30px;
+  margin: 0;
+  color: white;
+  font-size: 40px;
 `
 
 const description = css`
   margin: 0;
-  color: #999999;
+  color: white;
 `
 
 const titleContainer = css`
@@ -140,14 +153,9 @@ const titleContainer = css`
   padding-left: 15px;
 `
 
-const title = css`
-  margin-left: 30px;
-  font-weight: 500;
-  margin: 0;
-`
-
 const buttonContainer = css`
   width: 100%;
+  height: 50px;
   display: flex;
   flex: 1;
   justify-content: flex-end;
@@ -158,16 +166,27 @@ const buttonStyle = css`
   outline: none;
   border: none;
   font-size: 18px;
-  padding: 16px 70px;
-  border-radius: 15px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  padding-left: 30px;
+  padding-right: 30px;
+  border-radius: 10px;
   cursor: pointer;
   box-shadow: 7px 7px rgba(0, 0, 0, .1);
 `
 
 const link = css`
-  margin: 0px 40px 0px 0px;
+  display: flex;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, .5);
+  border-radius: 10px;
+  width: 150px;
+  margin: 0px 20px 0px 0px;
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 800;
+  color: white;
+  align-items: center;
+  justify-content: center;
 `
 
 export default MyApp

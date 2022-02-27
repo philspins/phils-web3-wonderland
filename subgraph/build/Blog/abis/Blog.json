@@ -30,6 +30,12 @@
         "internalType": "string",
         "name": "hash",
         "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "tags",
+        "type": "string"
       }
     ],
     "name": "PostCreated",
@@ -58,6 +64,12 @@
       },
       {
         "indexed": false,
+        "internalType": "string",
+        "name": "tags",
+        "type": "string"
+      },
+      {
+        "indexed": false,
         "internalType": "bool",
         "name": "published",
         "type": "bool"
@@ -76,6 +88,11 @@
       {
         "internalType": "string",
         "name": "hash",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "tags",
         "type": "string"
       }
     ],
@@ -109,6 +126,11 @@
           {
             "internalType": "string",
             "name": "content",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "tags",
             "type": "string"
           },
           {
@@ -147,13 +169,18 @@
             "type": "string"
           },
           {
+            "internalType": "string",
+            "name": "tags",
+            "type": "string"
+          },
+          {
             "internalType": "bool",
             "name": "published",
             "type": "bool"
           }
         ],
         "internalType": "struct Blog.Post[]",
-        "name": "",
+        "name": "posts",
         "type": "tuple[]"
       }
     ],
@@ -162,15 +189,42 @@
   },
   {
     "inputs": [],
-    "name": "getGreeting",
+    "name": "fetchPostsDescending",
     "outputs": [
       {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "content",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "tags",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "published",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct Blog.Post[]",
+        "name": "posts",
+        "type": "tuple[]"
       }
     ],
-    "stateMutability": "pure",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -240,6 +294,11 @@
       {
         "internalType": "string",
         "name": "hash",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "tags",
         "type": "string"
       },
       {
