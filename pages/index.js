@@ -1,25 +1,23 @@
+import ReactMarkdown from 'react-markdown'
 import { css } from '@emotion/css'
 import { useContext } from 'react'
 import { useRouter } from 'next/router'
 import { ethers } from 'ethers'
 import Link from 'next/link'
 import { AccountContext } from '../context'
-
-/* import contract address and contract owner address */
 import {
   contractAddress, ownerAddress
 } from '../config'
-
-/* import Application Binary Interface (ABI) */
 import Blog from '../artifacts/contracts/Blog.sol/Blog.json'
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
+
 
 export default function Home(props) {
-  /* posts are fetched server side and passed in as props */
-  /* see getServerSideProps */
+  // posts are fetched server side and passed in as props: see getServerSideProps
   const { posts } = props
   const account = useContext(AccountContext)
-
   const router = useRouter()
+
   async function navigate() {
     router.push('/create-post')
   }
@@ -38,9 +36,10 @@ export default function Home(props) {
             post[2] != "" && (
               <div>
                 <div className={postContainer}>
-                  <Link href={`/post/${post[3]}`} key={index}>
-                    <a className={postTitle}>{post[1]}</a>
+                  <Link href={`/post/${post.hash}`} key={index}>
+                    <a className={postTitle}>{post.title}</a>
                   </Link>
+                  <ReactMarkdown className={postSummary}>{post.postContent}</ReactMarkdown>
                   <p className={postSummary}>Tags: {post[2]}</p><br />
                 </div>
               </div>
@@ -73,11 +72,42 @@ export async function getServerSideProps() {
     provider = new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/')
   }
 
-  const contract = new ethers.Contract(contractAddress, Blog.abi, provider)
-  const data = await contract.fetchPostsDescending()
+  // const contract = new ethers.Contract(contractAddress, Blog.abi, provider)
+  // const data = await contract.fetchPostsDescending()
+  // return {
+  //   props: {
+  //     posts: JSON.parse(JSON.stringify(data))
+  //   }
+  // }
+
+  // Graph API endpoint
+  const APIURL = 'https://api.thegraph.com/subgraphs/name/philspins/web3-wonderland'
+
+  const postsQuery = `
+    query {
+      posts(first: 5) {
+        id
+        title
+        postContent
+        tags
+      }
+    }
+  `
+  const client = new ApolloClient({
+    uri: APIURL,
+    cache: new InMemoryCache(),
+  })
+
+  const data = await client.query({
+    query: gql(postsQuery),
+  })
+  .catch((err) => {
+    console.log('Error fetching data: ', err)
+  })
+  console.log(JSON.stringify(data.data.posts));
   return {
     props: {
-      posts: JSON.parse(JSON.stringify(data))
+      posts: JSON.parse(JSON.stringify(data.data.posts))
     }
   }
 }
