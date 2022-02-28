@@ -1,7 +1,7 @@
 import ReactMarkdown from 'react-markdown'
 import { useContext } from 'react'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
+import { IpfsLink } from '../../components/IpfsLink'
 import Image from 'next/image'
 import { css } from '@emotion/css'
 import { ethers } from 'ethers'
@@ -49,7 +49,7 @@ export default function Post({ post }) {
         /* if the owner is the user, render an edit button */
         ownerAddress === account && (
           <div className={button}>
-            <Link href={`/edit-post/${id}`}>Edit post</Link>
+            <IpfsLink href={`/edit-post/${id}`}>Edit post</IpfsLink>
           </div>
         )
       }

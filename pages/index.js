@@ -31,7 +31,7 @@ export default function Home(props) {
         {
           /* map over the posts array and render a button with the post title */
           posts.map((post, index) => (
-            post[2] != "" && (
+            post.title != "" && (
               <div>
                 <div className={postContainer}>
                   <IpfsLink href={`/post/${post.hash}`} key={index}>
