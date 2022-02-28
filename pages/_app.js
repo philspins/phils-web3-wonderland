@@ -9,6 +9,7 @@ import Image from 'next/image'
 import { AccountContext } from '../context.js'
 import { ownerAddress } from '../config'
 import 'easymde/dist/easymde.min.css'
+import logo from '../public/logo.svg'
 
 function MyApp({ Component, pageProps }) {
   const scriptTxt = `
@@ -65,10 +66,10 @@ function MyApp({ Component, pageProps }) {
                 <IpfsLink href="/">
                   <a>
                     <Image
-                      src='/logo.svg'
+                      src={logo}
                       alt="animated infinity icon"
-                      width="150"
-                      height="100"
+                      // width="150"
+                      // height="100"
                     />
                   </a>
                 </IpfsLink>
