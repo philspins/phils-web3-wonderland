@@ -1,15 +1,27 @@
 import '../styles/globals.css'
 import { useState } from 'react'
-import Link from 'next/link'
+import { IpfsLink } from '../components/IpfsLink'
 import { css } from '@emotion/css'
 import { ethers } from 'ethers'
 import Web3Modal from 'web3modal'
 import WalletConnectProvider from '@walletconnect/web3-provider'
+import Image from 'next/image'
 import { AccountContext } from '../context.js'
 import { ownerAddress } from '../config'
 import 'easymde/dist/easymde.min.css'
 
 function MyApp({ Component, pageProps }) {
+  const scriptTxt = `
+  (function () {
+    const { pathname } = window.location
+    const ipfsMatch = /.*\\/Qm\\w{44}\\//.exec(pathname)
+    const base = document.createElement('base')
+
+    base.href = ipfsMatch ? ipfsMatch[0] : './'
+    document.head.append(base)
+  })();
+  `
+
   const [account, setAccount] = useState(null)
   // web3Modal configuration for enabling wallet access
   async function getWeb3Modal() {
@@ -42,64 +54,70 @@ function MyApp({ Component, pageProps }) {
   }
 
   return (
-    <div>
-      <nav className={nav}>
-        <div className={header}>
-          <Link href="/">
-            <a>
-              <img
-                src='/logo.svg'
-                alt="animated infinity icon"
-                style={{
-                  width: '150px'
-                }}
-              />
-            </a>
-          </Link>
-          <Link href="/">
-            <a>
-              <div className={titleContainer}>
-                <h1 className={title}>Phil's Magical Web3 Wonderland</h1>
-                <h2 className={description}>straight from the block... chain</h2>
+    <html>
+        <head>
+            <script dangerouslySetInnerHTML={{__html: scriptTxt}}/>
+        </head>
+        <body>
+          <div>
+            <nav className={nav}>
+              <div className={header}>
+                <IpfsLink href="/">
+                  <a>
+                    <Image
+                      src='/logo.svg'
+                      alt="animated infinity icon"
+                      width="150"
+                      height="100"
+                    />
+                  </a>
+                </IpfsLink>
+                <IpfsLink href="/">
+                  <a>
+                    <div className={titleContainer}>
+                      <h1 className={title}>Phil&apos;s Magical Web3 Wonderland</h1>
+                      <h2 className={description}>straight from the block... chain</h2>
+                    </div>
+                  </a>
+                </IpfsLink>
+                {
+                  !account && (
+                    <div className={buttonContainer}>
+                      <button className={buttonStyle} onClick={connect}>Login</button>
+                    </div>
+                  )
+                }
+                {
+                  account && <p className={accountInfo}>{account}</p>
+                }
               </div>
-            </a>
-          </Link>
-          {
-            !account && (
-              <div className={buttonContainer}>
-                <button className={buttonStyle} onClick={connect}>Login</button>
+              <div className={linkContainer}>
+                <IpfsLink href="/" >
+                  <a className={link}>
+                    Home
+                  </a>
+                </IpfsLink>
+                {
+                  /* if the signed in user is the contract owner, we */
+                  /* show the nav link to create a new post */
+                  (account === ownerAddress) && (
+                    <IpfsLink href="/create-post">
+                      <a className={link}>
+                        Create Post
+                      </a>
+                    </IpfsLink>
+                  )
+                }
               </div>
-            )
-          }
-          {
-            account && <p className={accountInfo}>{account}</p>
-          }
-        </div>
-        <div className={linkContainer}>
-          <Link href="/" >
-            <a className={link}>
-              Home
-            </a>
-          </Link>
-          {
-            /* if the signed in user is the contract owner, we */
-            /* show the nav link to create a new post */
-            (account === ownerAddress) && (
-              <Link href="/create-post">
-                <a className={link}>
-                  Create Post
-                </a>
-              </Link>
-            )
-          }
-        </div>
-      </nav>
-      <div className={container}>
-        <AccountContext.Provider value={account}>
-          <Component {...pageProps} connect={connect} />
-        </AccountContext.Provider>
-      </div>
-    </div>
+            </nav>
+            <div className={container}>
+              <AccountContext.Provider value={account}>
+                <Component {...pageProps} connect={connect} />
+              </AccountContext.Provider>
+            </div>
+          </div>
+        </body>
+      </html>
   )
 }
 

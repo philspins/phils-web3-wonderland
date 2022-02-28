@@ -1,3 +1,4 @@
+import { ipfs, json } from '@graphprotocol/graph-ts'
 import {
   PostCreated as PostCreatedEvent,
   PostUpdated as PostUpdatedEvent
@@ -5,7 +6,6 @@ import {
 import {
   Post
 } from "../generated/schema"
-import { ipfs, json } from '@graphprotocol/graph-ts'
 
 export function handlePostCreated(event: PostCreatedEvent): void {
   let post = new Post(event.params.id.toString());

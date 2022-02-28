@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import ReactMarkdown from 'react-markdown'
 import { css } from '@emotion/css'
 import dynamic from 'next/dynamic'
+import Image from 'next/image'
 import { ethers } from 'ethers'
 import { create } from 'ipfs-http-client'
 
@@ -28,6 +29,7 @@ export default function Post() {
   useEffect(() => {
     fetchPost()
   }, [id])
+
   async function fetchPost() {
     /* we first fetch the individual post by ipfs hash from the network */
     if (!id) return
@@ -73,7 +75,7 @@ export default function Post() {
     const contract = new ethers.Contract(contractAddress, Blog.abi, signer)
     await contract.updatePost(post.id, post.title, hash, post.tags, true)
     // await contract.updatePost(post.id, post.title, Date.now(), post.tags, hash, true)
-    router.push('/')
+    router.push('./')
   }
 
   if (!post) return null
@@ -115,12 +117,9 @@ export default function Post() {
           <div>
             {
               post.coverImagePath && (
-                <img
-                src={post.coverImagePath}
-                className={coverImageStyle}
-                />
-                )
-              }
+                <Image src={post.coverImagePath} className={coverImageStyle} alt="cover image" />
+              )
+            }
             <div className={contentContainer}>
               <h1 className={title}>{post.title}</h1>
               <ReactMarkdown>{post.content}</ReactMarkdown>

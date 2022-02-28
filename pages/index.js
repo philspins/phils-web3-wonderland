@@ -2,8 +2,7 @@ import ReactMarkdown from 'react-markdown'
 import { css } from '@emotion/css'
 import { useContext } from 'react'
 import { useRouter } from 'next/router'
-import { ethers } from 'ethers'
-import Link from 'next/link'
+import { IpfsLink } from '../components/IpfsLink'
 import { AccountContext } from '../context'
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
 
@@ -18,7 +17,7 @@ export default function Home(props) {
   const router = useRouter()
 
   async function navigate() {
-    router.push('/create-post')
+    router.push('./create-post')
   }
 
   function postListVisible() {
@@ -35,9 +34,9 @@ export default function Home(props) {
             post[2] != "" && (
               <div>
                 <div className={postContainer}>
-                  <Link href={`/post/${post.hash}`} key={index}>
+                  <IpfsLink href={`/post/${post.hash}`} key={index}>
                     <a className={postTitle}>{post.title}</a>
-                  </Link>
+                  </IpfsLink>
                   <ReactMarkdown className={postSummary}>{post.postContent}</ReactMarkdown>
                   <p className={postSummary}>Tags: {post.tags}</p><br />
                 </div>
@@ -60,17 +59,6 @@ export default function Home(props) {
 }
 
 export async function getServerSideProps() {
-  /* here we check to see the current environment variable */
-  /* and render a provider based on the environment we're in */
-  let provider
-  if (process.env.ENVIRONMENT === 'local') {
-    provider = new ethers.providers.JsonRpcProvider('http://127.0.0.1:8545/')    
-  } else if (process.env.ENVIRONMENT === 'testnet') {
-    provider = new ethers.providers.JsonRpcProvider('https://rpc-mumbai.matic.today')
-  } else {
-    provider = new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/')
-  }
-  
   const APIURL = 'https://api.thegraph.com/subgraphs/name/philspins/web3-wonderland'
   const client = new ApolloClient({uri: APIURL, cache: new InMemoryCache()})
   const postsQuery = `

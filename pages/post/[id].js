@@ -2,6 +2,7 @@ import ReactMarkdown from 'react-markdown'
 import { useContext } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import Image from 'next/image'
 import { css } from '@emotion/css'
 import { ethers } from 'ethers'
 import { AccountContext } from '../../context'
@@ -31,10 +32,7 @@ export default function Post({ post }) {
             {
               /* if the post has a cover image, render it */
               post.coverImage && (
-                <img
-                  src={post.coverImage}
-                  className={coverImageStyle}
-                />
+                <Image src={post.coverImagePath} className={coverImageStyle} alt="cover image" />
               )
             }
             <div className={contentContainer}>

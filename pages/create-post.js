@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react' // new
 import { useRouter } from 'next/router'
+import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import { css } from '@emotion/css'
 import { ethers } from 'ethers'
@@ -99,7 +100,9 @@ function CreatePost() {
     <div className={container}>
       {
         image && (
-          <img className={coverImageStyle} src={URL.createObjectURL(image)} />
+          <Image className={coverImageStyle} 
+                 src={URL.createObjectURL(image)}
+                 alt="cover image" />
         )
       }
       <div>

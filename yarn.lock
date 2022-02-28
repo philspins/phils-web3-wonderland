@@ -8998,7 +8998,7 @@
   "resolved" "https://registry.npmjs.org/next-tick/-/next-tick-1.0.0.tgz"
   "version" "1.0.0"
 
-"next@>=10.2.0", "next@12.0.1":
+"next@^12.0.1", "next@>=10.2.0":
   "integrity" "sha512-4MNXAbD9+Tmtejg0TOKbaP52Cgu4mIn2ejKMLHWV0acxWGkkcE7QvdZwvg5pkg3fQBMrgucOxxtmw4D7yWaZvg=="
   "resolved" "https://registry.npmjs.org/next/-/next-12.0.1.tgz"
   "version" "12.0.1"
