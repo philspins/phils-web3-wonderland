@@ -11,7 +11,7 @@ import { AccountContext } from '../../context'
 import {
   contractAddress, ownerAddress
 } from '../../config'
-import Blog from '../../artifacts/contracts/Blog.sol/Blog.json'
+import Blog from '../../contracts/Blog.json'
 
 const ipfsURI = 'https://ipfs.io/ipfs/'
 
