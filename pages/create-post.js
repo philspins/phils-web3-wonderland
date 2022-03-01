@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from 'react' // new
 import { useRouter } from 'next/router'
-import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import { css } from '@emotion/css'
 import { ethers } from 'ethers'
@@ -27,10 +26,8 @@ const initialState = { title: '', content: '' }
 function CreatePost() {
   /* configure initial state to be used in the component */
   const [post, setPost] = useState(initialState)
-  const [image, setImage] = useState(null)
   const [loaded, setLoaded] = useState(false)
 
-  const fileRef = useRef(null)
   const { title, content, tags } = post
   const router = useRouter()
 
@@ -82,29 +79,8 @@ function CreatePost() {
     }    
   }
 
-  function triggerOnChange() {
-    /* trigger handleFileChange handler of hidden file input */
-    fileRef.current.click()
-  }
-
-  async function handleFileChange (e) {
-    /* upload cover image to ipfs and save hash to state */
-    const uploadedFile = e.target.files[0]
-    if (!uploadedFile) return
-    const added = await client.add(uploadedFile)
-    setPost(state => ({ ...state, coverImage: added.path }))
-    setImage(uploadedFile)
-  }
-
   return (
     <div className={container}>
-      {
-        image && (
-          <Image className={coverImageStyle} 
-                 src={URL.createObjectURL(image)}
-                 alt="cover image" />
-        )
-      }
       <div>
         <input
           name='title'
@@ -132,29 +108,13 @@ function CreatePost() {
           loaded && (
             <>
               <button className={button} type='button' onClick={createNewPost}>Publish</button>
-              <button  className={button} onClick={triggerOnChange}>Add cover image</button>
             </>
           )
         }
-        <input
-          id='selectImage'
-          className={hiddenInput} 
-          type='file'
-          onChange={handleFileChange}
-          ref={fileRef}
-        />
       </div>
     </div>
   )
 }
-
-const hiddenInput = css`
-  display: none;
-`
-
-const coverImageStyle = css`
-  max-width: 800px;
-`
 
 const titleStyle = css`
   padding: 15px;

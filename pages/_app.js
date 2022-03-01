@@ -1,15 +1,13 @@
 import '../styles/globals.css'
 import { useState } from 'react'
-import { IpfsLink } from '../components/IpfsLink'
 import { css } from '@emotion/css'
 import { ethers } from 'ethers'
 import Web3Modal from 'web3modal'
 import WalletConnectProvider from '@walletconnect/web3-provider'
-import Image from 'next/image'
+import Link from 'next/link'
 import { AccountContext } from '../context.js'
 import { ownerAddress } from '../config'
 import 'easymde/dist/easymde.min.css'
-import logo from '../public/logo.svg'
 
 function MyApp({ Component, pageProps }) {
   const scriptTxt = `
@@ -63,24 +61,15 @@ function MyApp({ Component, pageProps }) {
           <div>
             <nav className={nav}>
               <div className={header}>
-                <IpfsLink href="/">
-                  <a>
-                    <Image
-                      src={logo}
-                      alt="animated infinity icon"
-                      // width="150"
-                      // height="100"
-                    />
-                  </a>
-                </IpfsLink>
-                <IpfsLink href="/">
+                <div className={logo} />
+                <Link href="/">
                   <a>
                     <div className={titleContainer}>
                       <h1 className={title}>Phil&apos;s Magical Web3 Wonderland</h1>
                       <h2 className={description}>straight from the block... chain</h2>
                     </div>
                   </a>
-                </IpfsLink>
+                </Link>
                 {
                   !account && (
                     <div className={buttonContainer}>
@@ -93,20 +82,20 @@ function MyApp({ Component, pageProps }) {
                 }
               </div>
               <div className={linkContainer}>
-                <IpfsLink href="/" >
+                <Link href="/" >
                   <a className={link}>
                     Home
                   </a>
-                </IpfsLink>
+                </Link>
                 {
                   /* if the signed in user is the contract owner, we */
                   /* show the nav link to create a new post */
                   (account === ownerAddress) && (
-                    <IpfsLink href="/create-post">
+                    <Link href="/create-post">
                       <a className={link}>
                         Create Post
                       </a>
-                    </IpfsLink>
+                    </Link>
                   )
                 }
               </div>
@@ -152,6 +141,15 @@ const header = css`
   align-items: center;
   background-color: rgba(0, 0, 0, .075);
   padding: 20px;
+`
+
+const logo = css`
+  background-image: url("https://storageapi.fleek.co/ea67259b-39f8-4af3-9a70-34d3d524831a-bucket/logo.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 150px;
+  height: 100px;
 `
 
 const title = css`

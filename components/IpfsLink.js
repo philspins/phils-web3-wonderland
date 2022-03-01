@@ -10,7 +10,7 @@ export const IpfsLink = ({href, as, ...rest}) => {
     if (baseURI_as.startsWith('/')) {
       // for static html compilation
       baseURI_as = '.' + href
-      // <IPFSLink href="/about"> => <a class="jsx-2055897931" href="./about">About</a>
+      // <Link href="/about"> => <a class="jsx-2055897931" href="./about">About</a>
   
       // on the client
       // document is unavailable when compiling on the server

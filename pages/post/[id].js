@@ -1,8 +1,7 @@
 import ReactMarkdown from 'react-markdown'
 import { useContext } from 'react'
 import { useRouter } from 'next/router'
-import { IpfsLink } from '../../components/IpfsLink'
-import Image from 'next/image'
+import Link from 'next/link'
 import { css } from '@emotion/css'
 import { ethers } from 'ethers'
 import { AccountContext } from '../../context'
@@ -20,21 +19,11 @@ export default function Post({ post }) {
   const router = useRouter()
   const { id } = router.query
 
-  if (router.isFallback) {
-    return <div>Loading...</div>
-  }
-
   return (
     <div className={container}>
       {
         post && (
           <div>
-            {
-              /* if the post has a cover image, render it */
-              post.coverImage && (
-                <Image src={post.coverImagePath} className={coverImageStyle} alt="cover image" />
-              )
-            }
             <div className={contentContainer}>
               <h1 className={title}>{post.title}</h1>
               <ReactMarkdown>{post.content}</ReactMarkdown>
@@ -49,7 +38,7 @@ export default function Post({ post }) {
         /* if the owner is the user, render an edit button */
         ownerAddress === account && (
           <div className={button}>
-            <IpfsLink href={`/edit-post/${id}`}>Edit post</IpfsLink>
+            <Link href={`/edit-post/${id}`}>Edit post</Link>
           </div>
         )
       }
@@ -79,7 +68,7 @@ export async function getStaticPaths() {
 
   return {
     paths,
-    fallback: true
+    fallback: false
   }
 }
 
@@ -91,10 +80,6 @@ export async function getStaticProps({ params }) {
   const ipfsUrl = `${ipfsURI}/${id}`
   const response = await fetch(ipfsUrl)
   const data = await response.json()
-  if(data.coverImage) {
-    let coverImage = `${ipfsURI}/${data.coverImage}`
-    data.coverImage = coverImage
-  }
 
   return {
     props: {
@@ -102,10 +87,6 @@ export async function getStaticProps({ params }) {
     },
   }
 }
-
-const coverImageStyle = css`
-  width: 900px;
-`
 
 const container = css`
   width: 75%;
@@ -132,9 +113,6 @@ const contentContainer = css`
   background-color: #ffffff;
   border-radius: 10px;
   padding: 20px;
-  & img {
-    max-width: 900px;
-  }
 `
 
 const button = css`

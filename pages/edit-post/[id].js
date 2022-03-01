@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import ReactMarkdown from 'react-markdown'
 import { css } from '@emotion/css'
 import dynamic from 'next/dynamic'
-import Image from 'next/image'
 import { ethers } from 'ethers'
 import { create } from 'ipfs-http-client'
 
@@ -115,11 +114,6 @@ export default function Post() {
       {
         !editing && (
           <div>
-            {
-              post.coverImagePath && (
-                <Image src={post.coverImagePath} className={coverImageStyle} alt="cover image" />
-              )
-            }
             <div className={contentContainer}>
               <h1 className={title}>{post.title}</h1>
               <ReactMarkdown>{post.content}</ReactMarkdown>
@@ -139,10 +133,6 @@ export default function Post() {
     </div>
   )
 }
-
-const coverImageStyle = css`
-  width: 75%;
-`
 
 const title = css`
   margin: 0;
@@ -204,9 +194,6 @@ const contentContainer = css`
   padding: 20px;
   background-color: #ffffff;
   border-radius: 10px;
-  & img {
-    max-width: 900px;
-  }
 `
 
 const buttonContainer = css`

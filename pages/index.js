@@ -2,6 +2,7 @@ import ReactMarkdown from 'react-markdown'
 import { css } from '@emotion/css'
 import { useContext } from 'react'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 import { IpfsLink } from '../components/IpfsLink'
 import { AccountContext } from '../context'
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
@@ -32,14 +33,12 @@ export default function Home(props) {
           /* map over the posts array and render a button with the post title */
           posts.map((post, index) => (
             post.title != "" && (
-              <div>
-                <div className={postContainer}>
-                  <IpfsLink href={`/post/${post.hash}`} key={index}>
-                    <a className={postTitle}>{post.title}</a>
-                  </IpfsLink>
-                  <ReactMarkdown className={postSummary}>{post.postContent}</ReactMarkdown>
-                  <p className={postSummary}>Tags: {post.tags}</p><br />
-                </div>
+              <div className={postContainer}>
+                <Link href={`/post/${post.hash}`} key={index}>
+                  <a className={postTitle}>{post.title}</a>
+                </Link>
+                <ReactMarkdown className={postSummary}>{post.postContent}</ReactMarkdown>
+                <p className={postSummary}>Tags: {post.tags}</p><br />
               </div>
             )
           ))
@@ -58,7 +57,7 @@ export default function Home(props) {
   )
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const APIURL = 'https://api.thegraph.com/subgraphs/name/philspins/web3-wonderland'
   const client = new ApolloClient({uri: APIURL, cache: new InMemoryCache()})
   const postsQuery = `
