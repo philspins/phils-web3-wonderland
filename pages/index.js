@@ -59,6 +59,7 @@ export default function Home(props) {
 
 export async function getStaticProps() {
   const APIURL = 'https://api.thegraph.com/subgraphs/name/philspins/web3-wonderland'
+
   const client = new ApolloClient({uri: APIURL, cache: new InMemoryCache()})
   const postsQuery = `
     query {
