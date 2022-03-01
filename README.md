@@ -53,7 +53,6 @@ npm run dev
 npm run build && npm start
 ```
 
-
 ## Deploying to the Polygon Test Network
 
 1. Export the private key for the test account (Account #0 from the output of `npx hardhat node` in the previous section):
@@ -79,6 +78,40 @@ npx hardhat run scripts/deploy.js --network mumbai
 ```
 ENVIRONMENT="testnet"
 NEXT_PUBLIC_ENVIRONMENT="testnet"
+```
+
+5. Restart the server to register the change in environment variables:
+```
+npm run dev
+```
+
+## Deploying to the Polygon Main Network
+
+1. Export the private key for your main wallet.  Make sure that this wallet has some MATIC tokens. 
+!!! Do NOT share this key with !!
+!!! Do NOT save this key to source control !!
+```
+export pk="mainnet-wallet-with-MATIC-tokens"
+```
+
+2. Ensure that the Polygon configuration in hardhat.config.js is uncommented:
+
+```js
+// polygon: {
+//   url: "https://polygon-rpc.com/",
+//   accounts: [process.env.pk]
+// }
+```
+
+3. To deploy to Polygon mainnet, run the following command:
+```
+npx hardhat run scripts/deploy.js --network polygon
+```
+
+4. Then update the environment variables in .env.local to be `mainnet`:
+```
+ENVIRONMENT="mainnet"
+NEXT_PUBLIC_ENVIRONMENT="mainnet"
 ```
 
 5. Restart the server to register the change in environment variables:

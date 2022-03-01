@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: Blog
-    network: mumbai
+    network: matic
     source:
-      address: "0xe35953f00dcF8C922645c7ffEa8ac8CEdfF20028"
+      address: "0x6fBd48dEf2FBfABF0D9080Ee2b2B4eA28110Ff19"
       abi: Blog
-      startBlock: 25305100
+      startBlock: 25469651
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
