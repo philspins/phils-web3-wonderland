@@ -7,8 +7,8 @@ dataSources:
     network: matic
     source:
       address: "0x6fBd48dEf2FBfABF0D9080Ee2b2B4eA28110Ff19"
-      abi: Blog
       startBlock: 25469651
+      abi: Blog
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
