@@ -91,13 +91,20 @@ function MyApp({ Component, pageProps }) {
                   /* if the signed in user is the contract owner, we */
                   /* show the nav link to create a new post */
                   (account === ownerAddress) && (
-                    <Link href="/create-post">
-                      <a className={link}>
-                        Create Post
-                      </a>
-                    </Link>
+                    <div>
+                      <Link href="/create-post">
+                        <a className={link}>
+                          Create Post
+                        </a>
+                      </Link>
+                    </div>
                   )
                 }
+                <Link href="/transfer">
+                  <a className={link}>
+                    Transfer
+                  </a>
+                </Link>
               </div>
             </nav>
             <div className={container}>

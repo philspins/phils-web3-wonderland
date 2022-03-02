@@ -43,4 +43,14 @@ describe("Blog", async function () {
     await blog.updateName('My new blog')
     expect(await blog.name()).to.equal("My new blog")
   })
+
+  it("Should transfer owner", async function () {
+    const Blog = await ethers.getContractFactory("Blog")
+    const blog = await Blog.deploy("Phil's Magical Web3 CrYp70bl06")
+    await blog.deployed()
+
+    expect(await blog.name()).to.equal("Phil's Magical Web3 CrYp70bl06")
+    await blog.updateName('My new blog')
+    expect(await blog.name()).to.equal("My new blog")
+  })
 })
