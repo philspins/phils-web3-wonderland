@@ -97,14 +97,14 @@ function MyApp({ Component, pageProps }) {
                           Create Post
                         </a>
                       </Link>
+                      <Link href="/transfer">
+                        <a className={link}>
+                          Transfer
+                        </a>
+                      </Link>
                     </div>
                   )
                 }
-                <Link href="/transfer">
-                  <a className={link}>
-                    Transfer
-                  </a>
-                </Link>
               </div>
             </nav>
             <div className={container}>
