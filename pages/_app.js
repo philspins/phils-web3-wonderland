@@ -7,6 +7,7 @@ import WalletConnectProvider from '@walletconnect/web3-provider'
 import Link from 'next/link'
 import { AccountContext } from '../context.js'
 import { ownerAddress } from '../config'
+import Social from '../components/Social'
 import 'easymde/dist/easymde.min.css'
 
 function MyApp({ Component, pageProps }) {
@@ -87,6 +88,16 @@ function MyApp({ Component, pageProps }) {
                     Home
                   </a>
                 </Link>
+                <Link href="/portfolio" >
+                  <a className={link}>
+                    Portfolio
+                  </a>
+                </Link>
+                <Link href="/about" >
+                  <a className={link}>
+                    About
+                  </a>
+                </Link>
                 {
                   /* if the signed in user is the contract owner, we */
                   /* show the nav link to create a new post */
@@ -97,9 +108,9 @@ function MyApp({ Component, pageProps }) {
                           Create Post
                         </a>
                       </Link>
-                      <Link href="/transfer">
+                      <Link href="/admin">
                         <a className={link}>
-                          Transfer
+                          Admin
                         </a>
                       </Link>
                     </div>
@@ -111,6 +122,9 @@ function MyApp({ Component, pageProps }) {
               <AccountContext.Provider value={account}>
                 <Component {...pageProps} connect={connect} />
               </AccountContext.Provider>
+            </div>
+            <div className={socials}>
+              <Social />
             </div>
           </div>
         </body>
@@ -128,6 +142,12 @@ const accountInfo = css`
 
 const container = css`
   padding: 40px;
+`
+
+const socials = css`
+  padding: 20px;
+  position: fixed;
+  left: 0px; bottom: 0px;
 `
 
 const linkContainer = css`

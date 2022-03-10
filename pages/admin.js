@@ -14,7 +14,7 @@ import Blog from '../contracts/Blog.json'
 
 const initialState = { address: '' }
 
-function CreatenewAddress() {
+function AdminConsole() {
   /* configure initial state to be used in the component */
   const [props, setProps] = useState(initialState)
   // const { address } = props
@@ -135,4 +135,4 @@ const button = css`
   justify-content: flex-end;
 `
 
-export default CreatenewAddress
+export default AdminConsole

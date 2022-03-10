@@ -63,7 +63,7 @@ export async function getStaticProps() {
   const client = new ApolloClient({uri: APIURL, cache: new InMemoryCache()})
   const postsQuery = `
     query {
-      posts(first: 5) {
+      posts(first: 5, orderBy: createdAtTimestamp, orderDirection: desc) {
         hash
         title
         postContent
