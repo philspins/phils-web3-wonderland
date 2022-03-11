@@ -102,7 +102,7 @@ function MyApp({ Component, pageProps }) {
                   /* if the signed in user is the contract owner, we */
                   /* show the nav link to create a new post */
                   (account === ownerAddress) && (
-                    <div>
+                    <div className={privateLinkContainer}>
                       <Link href="/create-post">
                         <a className={link}>
                           Create Post
@@ -153,14 +153,16 @@ const socials = css`
 const linkContainer = css`
   display: flex;
   background-color: rgba(255, 255, 255, .75);
-  padding: 10px 20px;
+  justify-content: center;
+`
+
+const privateLinkContainer = css`
+  display: flex;
   justify-content: center;
 `
 
 const nav = css`
   justify-content: center;
-  font-weight: 600;
-  color: white;
 `
 
 const header = css`
@@ -222,13 +224,12 @@ const buttonStyle = css`
 const link = css`
   display: flex;
   padding: 20px;
-  background-color: rgba(0, 0, 0, .5);
   border-radius: 10px;
   width: 150px;
   margin: 0px 20px 0px 0px;
-  font-size: 16px;
+  font-size: 24px;
   font-weight: 800;
-  color: white;
+  color: rgba(30, 30, 30, .7);
   align-items: center;
   justify-content: center;
 `
